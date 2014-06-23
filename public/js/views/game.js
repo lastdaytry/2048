@@ -43,8 +43,8 @@ define([
             Grid.setup();
             this.$el.find('.page__game').hide();
 
-            //this.gameOverForm = new gameOver();
-            //this.gameOver = false;
+            this.gameOverForm = new gameOver();
+            this.gameOver = false;
 
         },
         render: function () {
@@ -60,18 +60,21 @@ define([
                 name: this._name
             });
             this.$el.find('.page__game').show();
-            //this.gameOver = true;
-            //this.gameOverForm.show(2);
-
+            
         },
         move: function(event) {
             var modifiers = event.altKey || event.ctrlKey || event.metaKey ||
                 event.shiftKey;
             var dir    = this.keyMap[event.which];
+            if (!this.movesAvailable()) {
+                this.gameOver = true;
+                this.gameOverForm.show(Grid.score);
+            }
             if (!modifiers && dir != undefined) {
                 event.preventDefault();
                 Grid.move(dir);
             }
+
         },
         _normalizePos: function(x, y) {
             return {
@@ -115,6 +118,9 @@ define([
         },
         updateScore: function() {
             this.$el.find('.score-container').html(Grid.score);
+        },
+        movesAvailable: function() {
+            return Grid.getFreeTiles().length || Grid.tileMatchesAvailable();
         },
         hide: function () {
             this.$el.find('.page__game').hide();

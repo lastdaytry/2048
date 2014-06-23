@@ -41,6 +41,11 @@ define([
                 return !tile.isfree();
             });
         },
+        getTile: function(x,y) {
+            return this.filter(function(tile) {
+                return tile.check(x,y);
+            });
+        },
 
         // randomly choose one free tile, put value on it
         randomTile: function() {
@@ -96,11 +101,42 @@ define([
             }, this);
             if (moved) { // move done, random a new one and trigger view to repaint
                 this.randomTile();
-                console.info(_(this.getOccupiedTiles()).pluck('attributes') );
+               // console.info(_(this.getOccupiedTiles()).pluck('attributes') );
                 this.trigger('tileschange', this);
                 this.resetTiles();
             }
         },
+
+        getVector: function(direction) {
+          // Vectors representing tile movement
+            var map = {
+                0: { x: 0, y: -1 }, // Up
+                1: { x: 1, y: 0 }, // Right
+                2: { x: 0, y: 1 }, // Down
+                3: { x: -1, y: 0 } // Left
+            };
+            return map[direction];
+        },
+
+        tileMatchesAvailable: function() {
+            var self = this;
+            var tile;
+            for (var x = 0; x < this.size; x++) {
+                for (var y = 0; y < this.size; y++) {
+                    tile = this.getTile(x,y);
+                    if (tile.length >= 1) {
+                        for (var direction = 0; direction < 4; direction++) {
+                            var vector = self.getVector(direction);
+                            var other =  this.getTile(x + vector.x,  y + vector.y);
+                            if (other.length && other[0].get('value') === tile[0].get('value')) {
+                                return true; // These two tiles can be merged
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
 
 
     });

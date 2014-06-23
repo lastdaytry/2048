@@ -25,6 +25,9 @@ define([
             var x = idx % size;
             return {x:x, y:y};
         },
+        check: function(x,y) {
+           return this.get('x') == x && this.get('y') == y;
+        },
 
         put: function(value) {
             this.set({value: value});
