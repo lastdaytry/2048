@@ -9,9 +9,10 @@ define([
         size: 4,
         startTiles: 2,
         model: Tile,
+        score: 0,
 
         initialize: function(modeldata, options) {
-            var num = this.get('size') * this.get('size');
+            var num = this.size * this.size;
             //console.info(options);
             for (var i = 0; i < num; i++) {
                 this.add({
@@ -22,7 +23,7 @@ define([
         },
 
         setup: function() {
-            for (var j = 0; j < this.get('startTiles'); j++) {
+            for (var j = 0; j < this.startTiles; j++) {
                 this.randomTile();
             }
             // notify view to repaint
@@ -62,6 +63,7 @@ define([
             if (sibling && sibling.equals(tile) && !sibling.isMerged()) {
                 moved = true;
                 tile.mergeTo(sibling);
+                this.score += sibling.get('value');
             }
             else if (!tile.equals(farthest) ) { // farthest is another free tile
                 moved = true;
@@ -102,5 +104,6 @@ define([
 
 
     });
-    return Grid();
+    var grid = new Grid();
+    return grid;
 });

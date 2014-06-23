@@ -3,6 +3,7 @@
 
     <a href="#" class="js-back button">&#9664; Back</a>
 
+    <div class="score-container">0</div>
     <div class="grid-container"></div>
     <div class="tile-container"></div>
 

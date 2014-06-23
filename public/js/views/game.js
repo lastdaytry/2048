@@ -13,7 +13,7 @@ define([
     tmplTile,
     vm,
     gameOver,
-    grid
+    Grid
 ){
 
     var View = Backbone.View.extend({
@@ -22,7 +22,7 @@ define([
         tmplBoard: tmplBoard,
         tmplTile: tmplTile,
 
-        el: ".page__game",
+        el: $(document),
         _name: "game",
 
         events: {
@@ -37,10 +37,11 @@ define([
 
 
         initialize: function () {
-            this.listenTo(app.grid, 'tileschange', this.rePaint());
+            this.listenTo(Grid, 'tileschange', this.rePaint);
+            //this.listenTo(Grid, 'tileschange', this.log);
             this.render();
-            app.grid.setup();
-            this.$el.hide();
+            Grid.setup();
+            this.$el.find('.page__game').hide();
 
             //this.gameOverForm = new gameOver();
             //this.gameOver = false;
@@ -48,7 +49,7 @@ define([
         },
         render: function () {
             //this.template = this.$template('.grid-container').html(this.tmplBoard({size: this.model.size}));
-            this.$el.html(this.template);
+            this.$el.find('.page__game').html(this.template);
             this.$('.grid-container')
                 .html(this.tmplBoard({size: this.model.size}));
 
@@ -58,7 +59,7 @@ define([
                 type: "show",
                 name: this._name
             });
-            this.$el.show();
+            this.$el.find('.page__game').show();
             //this.gameOver = true;
             //this.gameOverForm.show(2);
 
@@ -69,7 +70,7 @@ define([
             var dir    = this.keyMap[event.which];
             if (!modifiers && dir != undefined) {
                 event.preventDefault();
-                app.grid.move(dir);
+                Grid.move(dir);
             }
         },
         _normalizePos: function(x, y) {
@@ -87,11 +88,13 @@ define([
             var tiles = grid.getOccupiedTiles();
             _(tiles).each(function(tile, i) {
                 var pos = this._normalizePos(tile.get('x'), tile.get('y'));
-                var tplstr = this.tileTpl({x:pos.x, y:pos.y, value:tile.get('value')});
+                var tplstr = this.tmplTile({x:pos.x, y:pos.y, value:tile.get('value')});
                 var tileEl = $(tplstr);
                 if (tile.isNew())
                     tileEl.addClass('tile-new');
                 else if (tile.isMerged())
+                    this.updateScore();
+
                     tileEl.addClass('tile-merged');
                 $('.tile-container').append(tileEl);
             }, this);
@@ -110,11 +113,14 @@ define([
                 }
             });
         },
+        updateScore: function() {
+            this.$el.find('.score-container').html(Grid.score);
+        },
         hide: function () {
-            this.$el.hide();
+            this.$el.find('.page__game').hide();
         }
 
     });
 
-    return View({model: grid});
+    return new View({model: Grid});
 });

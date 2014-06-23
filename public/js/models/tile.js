@@ -103,4 +103,5 @@ define([
         }
 
     });
+    return Tile;
 });
