@@ -1,0 +1,6 @@
+<fest:template xmlns:fest="http://fest.mail.ru"
+    context_name="json">
+<div id="" class="tile tile-{json.value} tile-position-{json.x}-{json.y}">
+        <div class="tile-inner"><fest:value>json.value</fest:value></div>
+    </div>
+</fest:template>

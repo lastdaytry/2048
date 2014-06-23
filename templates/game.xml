@@ -1,0 +1,14 @@
+<fest:template xmlns:fest="http://fest.mail.ru"
+    context_name="json">
+
+    <a href="#" class="js-back button">&#9664; Back</a>
+
+    <div class="grid-container"></div>
+    <div class="tile-container"></div>
+
+
+<!-- Modal GameOver -->
+    <div class="game__gameover"></div>
+    <div class="overlay"></div>
+
+</fest:template>

@@ -1,0 +1,18 @@
+<fest:template xmlns:fest="http://fest.mail.ru"
+    context_name="json">
+    <div class="header">
+        <h1 class="header__title">epic game</h1>
+        <h2 class="header__current">Main menu</h2>
+    </div>
+
+    <ul class="main-menu">
+
+        <li class="main-menu__element">
+            <a href="/#scoreboard" class="button main-menu__button">Score board</a>
+        </li>
+        <li class="main-menu__element">
+            <a href="/#game" class="button main-menu__button">Start game</a>
+        </li>
+    </ul>
+
+</fest:template>

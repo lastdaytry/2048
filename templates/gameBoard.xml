@@ -1,0 +1,10 @@
+<fest:template xmlns:fest="http://fest.mail.ru"
+    context_name="json">
+    <fest:for from="1" to="json.size" index="y">
+        <div class="grid-row">
+            <fest:for from="1" to="json.size" index="x">
+                <div class="grid-cell"></div>
+            </fest:for>
+        </div>
+    </fest:for>
+</fest:template>

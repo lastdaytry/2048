@@ -1,0 +1,10 @@
+<fest:template xmlns:fest="http://fest.mail.ru"
+context_name="json">
+<div class="header">
+  <h1 class="header__title">Epic game</h1>
+  <h2 class="header__current">Score board</h2>
+</div>
+<div id="loading">Загрузка...</div>
+<div id="scoreTable"></div>
+<div id="scoreError"></div>
+</fest:template>
