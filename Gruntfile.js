@@ -28,6 +28,13 @@ module.exports = function (grunt) {
                     interrupt: true,
                     livereload: true
                 }
+            },
+            sass: {
+                files: ['public/css/*.css'],
+                tasks: ['sass'],
+                options: {
+                    atBegin: true
+                }
             }
         },
         express: {
@@ -56,12 +63,24 @@ module.exports = function (grunt) {
                     }
                 }
             }
+        },
+        sass: {
+            css: {
+                files: [{
+                    expand: true,
+                    cwd: 'public/css',
+                    src: '*.scss',
+                    dest: 'public/css',
+                    ext: '.css'
+                }]
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-express-server');
     grunt.loadNpmTasks('grunt-fest');
+    grunt.loadNpmTasks('grunt-contrib-sass');
 
     grunt.registerTask('default', ['express', 'watch']);
 
