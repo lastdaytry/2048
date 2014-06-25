@@ -20,10 +20,10 @@ define([
         },
 
         render: function() {
+            ("#loading").show();
             Storage.update();
             Scoreboard.url = "/scores";
             Scoreboard.fetch();
-            $("#loading").show();
             $("#scoreError").html("");
             this.$el.hide();
             var self = this;

@@ -1,7 +1,7 @@
 <fest:template xmlns:fest="http://fest.mail.ru"
     context_name="json">
     <div class="header">
-        <h1 class="header__title">epic game</h1>
+        <h1 class="header__title">2048, again!</h1>
         <h2 class="header__current">Main menu</h2>
     </div>
 

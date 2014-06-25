@@ -17,6 +17,7 @@ define([
         initialize: function () {
             this.render();
             this.$el.hide();
+            $('.loading').hide();
 
         },
         render: function () {

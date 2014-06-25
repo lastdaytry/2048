@@ -5,7 +5,9 @@ define([
     'tmpl/gameTile',
     'vm',
     'views/gameOver',
-    'collections/grid'
+    'collections/grid',
+    'serverConnection',
+    'lib/Connector'
 ], function(
     Backbone,
     tmpl,
@@ -13,7 +15,9 @@ define([
     tmplTile,
     vm,
     gameOver,
-    Grid
+    Grid,
+    serverHelper,
+    Connector
 ){
 
     var View = Backbone.View.extend({
@@ -25,15 +29,16 @@ define([
         el: $(document),
         _name: "game",
 
-        events: {
-            'keydown': 'move'
-        },
-        keyMap: {
-            38: 'up',
-            39: 'right',
-            40: 'down',
-            37: 'left'
-        },
+        //events: {
+        //    'keydown': 'move'
+        //},
+        // keyMap: {
+        //     38: 'up',
+        //     39: 'right',
+        //     40: 'down',
+        //     37: 'left'
+        // },
+
 
 
         initialize: function () {
@@ -41,14 +46,35 @@ define([
             //this.listenTo(Grid, 'tileschange', this.log);
             this.render();
             Grid.setup();
+            var self = this;
             this.$el.find('.page__game').hide();
 
             this.gameOverForm = new gameOver();
             this.gameOver = false;
 
+            var self = this;
+            server.on('message', function(data, answer) {
+                switch (data.type) {
+                    case 'up':
+                        self.move('up');
+                        break;
+                    case 'down':
+                        self.move('down');
+                        break;
+                    case 'left':
+                        self.move('left');
+                        break;
+                    case 'right':
+                        self.move('right');
+                        break;
+                    case 'newGame':
+                        Grid.clearGrid();
+                        Grid.setup();
+                }
+            });
+
         },
         render: function () {
-            //this.template = this.$template('.grid-container').html(this.tmplBoard({size: this.model.size}));
             this.$el.find('.page__game').html(this.template);
             this.$('.grid-container')
                 .html(this.tmplBoard({size: this.model.size}));
@@ -60,21 +86,32 @@ define([
                 name: this._name
             });
             this.$el.find('.page__game').show();
-            
+            this.$el.find('.container').hide();
+            serverHelper.init();
+
         },
-        move: function(event) {
-            var modifiers = event.altKey || event.ctrlKey || event.metaKey ||
-                event.shiftKey;
-            var dir    = this.keyMap[event.which];
-            if (!this.movesAvailable()) {
+        // move: function(event) {
+        //     var modifiers = event.altKey || event.ctrlKey || event.metaKey ||
+        //         event.shiftKey;
+        //     var dir    = this.keyMap[event.which];
+        //     if (!this.movesAvailable()) {
+        //         this.gameOver = true;
+        //         this.gameOverForm.show(Grid.score);
+        //     }
+        //     if (!modifiers && dir != undefined) {
+        //         event.preventDefault();
+        //         Grid.move(dir);
+        //     }
+        // },
+        move: function(dir) {
+            console.log('move');
+            if (!this.movesAvailable() && !this.gameOver) {
                 this.gameOver = true;
                 this.gameOverForm.show(Grid.score);
             }
-            if (!modifiers && dir != undefined) {
-                event.preventDefault();
+            if (dir != undefined) {
                 Grid.move(dir);
             }
-
         },
         _normalizePos: function(x, y) {
             return {
@@ -124,6 +161,11 @@ define([
         },
         hide: function () {
             this.$el.find('.page__game').hide();
+        },
+        messegeResieved: function(data, answer) {
+            if (data.type == 'up') {
+                this.move('up');
+            }
         }
 
     });

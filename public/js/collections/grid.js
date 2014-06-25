@@ -136,6 +136,19 @@ define([
                 }
             }
             return false;
+        },
+
+        clearGrid: function() {
+            this.reset();
+            var num = this.size * this.size;
+            //console.info(options);
+            for (var i = 0; i < num; i++) {
+                this.add({
+                    idx: i,
+                    grid: this
+                });
+            }
+            this.trigger('tileschange', this);
         }
 
 
